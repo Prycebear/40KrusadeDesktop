@@ -17,7 +17,7 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/factions" element={<Factions />} />
                 <Route path="/units" element={<Units />} />
-                <Route path="/crusades" element={<Crusades />} />
+                <Route path="/crusadeForces" element={<Crusades />} />
                 <Route path="/rosters" element={<Rosters />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

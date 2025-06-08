@@ -2,11 +2,13 @@
 import React from "react";
 
 interface FactionCardProps {
+    key: number;
     name: string;
     rule: string;
 }
 
-export default function FactionCard({ name, rule }: FactionCardProps) {
+export default function FactionCard({key, name, rule }: FactionCardProps) {
+    console.log(key)
     return (
         <div style={styles.card}>
             <h3 style={styles.cardTitle}>{name}</h3>

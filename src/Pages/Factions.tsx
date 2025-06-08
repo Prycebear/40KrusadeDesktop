@@ -1,36 +1,73 @@
-// src/pages/Factions.tsx
-import useFetch from "../Hooks/useFetch";
-import FactionCard from "../components/FactionCard"; // Import the FactionCard component
-import {useState} from "react";
+import React, { useEffect, useState } from "react";
+import Card from "../components/Card";
+import FactionService from "../Services/FactionService";
+import { Faction } from "../Interfaces/FactionObjects";
+import ListDisplay from "./ListDisplay";
 
 export default function Factions() {
-    const {data, loading, error} = useFetch("http://localhost:8080/api/faction");
+    const [factions, setFactions] = useState<Faction[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [columns, setColumns] = useState(3);
 
-    const handleColumnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setColumns(Number(event.target.value));
+    useEffect(() => {
+        FactionService.getAll()
+            .then((data) => {
+                setFactions(data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setError("Failed to load factions.");
+                setLoading(false);
+            });
+    }, []);
+
+    const handleColumnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setColumns(Number(e.target.value));
     };
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
+    if (loading) return <div>Loading factions...</div>;
+    if (error) return <div>{error}</div>;
 
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>Factions</h1>
-            <div style={{...styles.cardContainer, gridTemplateColumns: `repeat(${columns}, 1fr)`}}>
-                {data.map((faction: any) => (
-                    <FactionCard
-                        name={faction.factionName}
-                        rule={faction.factionRule}
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column" as "column",
+                alignItems: "center",
+                padding: "2rem",
+                backgroundColor: "#1f1f1f",
+                minHeight: "100vh",
+            }}
+        >
+            <h1 style={{ color: "#fff", marginBottom: "1.5rem" }}>Factions</h1>
+
+            <ListDisplay<Faction>
+                data={factions}
+                cardsPerRow={columns}
+                renderItem={(faction) => (
+                    <Card<Faction>
+                        key={faction.factionId}
+                        data={faction}
+                        renderContent={(f) => (
+                            <>
+                                <h3>{f.factionName}</h3>
+                                <p>{f.factionRule}</p>
+                            </>
+                        )}
                     />
-                ))}
-            </div>
-            <div style={styles.columnSelector}>
+                )}
+            />
+
+            <div
+                style={{
+                    marginBottom: "1.5rem",
+                    color: "#ccc",
+                    fontSize: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                }}
+            >
                 <label htmlFor="columns">Cards per Row: </label>
                 <select id="columns" value={columns} onChange={handleColumnChange}>
                     <option value={2}>2</option>
@@ -42,31 +79,3 @@ export default function Factions() {
         </div>
     );
 }
-const styles = {
-    container: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "2rem",
-        backgroundColor: "#1f1f1f",
-        minHeight: "100vh",
-    },
-    title: {
-        color: "#fff",
-        marginBottom: "1.5rem",
-    },
-    cardContainer: {
-        display: "grid",
-        gap: "1.5rem",
-        width: "100%",
-        justifyContent: "center",
-        transition: "grid-template-columns 0.3s ease",
-    },
-    columnSelector: {
-        marginBottom: "1.5rem",
-        color: "#ccc",
-        fontSize: "1rem",
-        display: "flex",
-        alignItems: "center",
-    }
-};

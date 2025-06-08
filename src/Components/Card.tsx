@@ -1,24 +1,56 @@
 // src/components/Card.tsx
 import React from "react";
 
-interface CardProps<T> {
-    key: number;
-    data: T;
-    renderContent: (data: T) => React.ReactNode;
-}
+type CardProps = {
+    id: number;
+    title: string;
+    image: string;
+};
 
-export default function Card<T>({ data, renderContent }: CardProps<T>) {
+
+export default function Card({id, title, image}: CardProps)
+{
     return (
-        <div
-            style={{
-                backgroundColor: "#2a2a2a",
-                padding: "1rem",
-                borderRadius: "8px",
-                color: "#fff",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.5)",
-            }}
-        >
-            {renderContent(data)}
+        <div style={{
+            backgroundColor: "#2a2a2a",
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            textAlign: "center" as const,
+            color: "#fff",
+            paddingBottom: "1rem",
+            maxWidth: "250px",
+        }}>
+            <img src={image} alt={title} style={{
+                width: "100%",
+                height: "auto",
+            }}/>
+            <h3 style={{
+                margin: "1rem 0 0 0",
+                fontSize: "1.2rem",
+            }}>{title}</h3>
         </div>
     );
 }
+;
+
+const styles = {
+    card: {
+        backgroundColor: "#2a2a2a",
+        borderRadius: "12px",
+        overflow: "hidden",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+        textAlign: "center" as const,
+        color: "#fff",
+        paddingBottom: "1rem",
+        maxWidth: "250px",
+    },
+    image: {
+        width: "100%",
+        height: "auto",
+    },
+    title: {
+        margin: "1rem 0 0 0",
+        fontSize: "1.2rem",
+    },
+};

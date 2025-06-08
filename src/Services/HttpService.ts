@@ -14,7 +14,6 @@ export class HttpService<T> {
             baseURL: this.baseUrl,
         });
 
-        // Attach Authorization header if token exists
         this.axiosInstance.interceptors.request.use(config => {
             const token = localStorage.getItem('authToken');
             if (token) {

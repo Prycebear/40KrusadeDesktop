@@ -3,6 +3,7 @@ import Card from "../components/Card";
 import FactionService from "../Services/FactionService";
 import { Faction } from "../Interfaces/FactionObjects";
 import ListDisplay from "./ListDisplay";
+import CardGrid from "./CardGrid";
 
 export default function Factions() {
     const [factions, setFactions] = useState<Faction[]>([]);
@@ -42,22 +43,8 @@ export default function Factions() {
         >
             <h1 style={{ color: "#fff", marginBottom: "1.5rem" }}>Factions</h1>
 
-            <ListDisplay<Faction>
-                data={factions}
-                cardsPerRow={columns}
-                renderItem={(faction) => (
-                    <Card<Faction>
-                        key={faction.factionId}
-                        data={faction}
-                        renderContent={(f) => (
-                            <>
-                                <h3>{f.factionName}</h3>
-                                <p>{f.factionRule}</p>
-                            </>
-                        )}
-                    />
-                )}
-            />
+            <CardGrid data={factions}/>
+
 
             <div
                 style={{
